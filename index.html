@@ -1,5 +1,4 @@
 <html class="gr__rapidprpromotion_com">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,9 +13,9 @@
   <link href="css/style.css" rel="stylesheet">
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
   <style>
     [ng\:cloak],
     [ng-cloak],
@@ -31,156 +30,236 @@
   <script src="js/angular.js"></script>
   <script src="js/my_ctrl.js"></script>
 </head>
-
 <body ng-app="my_app" ng-controller="my_ctrl" data-gr-c-s-loaded="true" class="ng-scope">
-  <div>
-    <div class="container">
-      <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6">
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" data-pg-collapsed>
-          <h3>Column title</h3>
-          <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" data-pg-collapsed>
-          <canvas id="subimgview" style="border: 1px solid black">
-          </canvas>
-        </div>
+<div>
+  <div class="container">
+    <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <ul id="keyContainer">
+          <!--<li><span class="key" style="color: red;">Head : </span><span class="key_point">[X,Y]</span></li>
+          <li><span class="key">Elbow : </span><span class="key_point">[X,Y]</span></li>
+          <li><span class="key">hair : </span><span class="key_point">[X,Y]</span></li>
+          <li><span class="key">hand : </span><span class="key_point">[X,Y]</span></li>
+          <li><span class="key">face : </span><span class="key_point">[X,Y]</span></li>-->
+        </ul>
       </div>
-      <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6">
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <a href="#" class="thumbnail" data-pg-collapsed>
-                <canvas style="border: 1px solid black" id="canvas"></canvas>
-            </a>
-            <button id="cropB" type="button" class="btn btn-default">Crop</button>
-          </div>
-          <div class="row" id="partimg">
-          </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <canvas id="subimgview" style="border: 1px solid black">
+        </canvas>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <a href="#" class="thumbnail">
+            <img src="img/images.jpg" id="mainimg" />
+          </a>
+        </div>
+        <div class="row" id="partimg">
         </div>
       </div>
     </div>
   </div>
-  <!-- Bootstrap core JavaScript
-    ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <script src="js/ie10-viewport-bug-workaround.js"></script>
-  <script src="js/bootstrap-select.min.js"></script>
-  <script src="js/fabric.min.js"></script>
-  <script>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="js/ie10-viewport-bug-workaround.js"></script>
+<script src="js/bootstrap-select.min.js"></script>
+<script src="js/fabric.min.js"></script>
+<script>
+    var colorCode=['F93106', //use for list of key color and coordinate of sub canvas
+        'F9F906',
+        'A1F906',
+        '06F9D0',
+        '06BAF9',
+        '0636F9',
+        '450597',
+        'EC00FF',
+        'FF009E',
+        'FF005D',
+        'FF000C',
+        '833E41',
+        '000000'];
+    var colorSelectedindex=0; //currently which color in selected key
+    //var output=
+    var input = {             //my input json
+        "test": {
+            "anno": {
+                "bbox": [{
+                    "box": [0, 0, 75, 75],
+                    "status": "standing",
+                    "keypoints": [{
+                        "keyname": "kename_1",
+                        "keypoint": [100, 200]
+                    }, {
+                        "keyname": "kename_2",
+                        "keypoint": [100, 200]
+                    }, {
+                        "keyname": "kename_n",
+                        "keypoint": [100, 200]
+                    }]
+                },
+                    {
+                        "box": [50, 50, 89, 100],
+                        "status": "standing",
+                        "keypoints": [{
+                            "keyname": "kename_1",
+                            "keypoint": [100, 200]
+                        }, {
+                            "keyname": "kename_2",
+                            "keypoint": [100, 200]
+                        }, {
+                            "keyname": "kename_n",
+                            "keypoint": [100, 200]
+                        }]
+                    }
+                ],
+                "size": [500, 375]
+            },
+            "imgpath": "img/images.jpg"
+        }
+    };
+    var boxArray = input.test.anno.bbox;
+    var circleHashSet={};                      //use for a key is create circle or not in subcanvas
+    var selectedKeySib;                         // which key is selected & which his sibling
+    var selectedKeyColorCode;                   // Which color is selected now
+    var selectKeyId;                            //Which key is selected now
+    $(document).on('click', '.key', function() {  // Which key is click nopw event
+        selectedKeySib=$(this).siblings();
+        selectedKeyColorCode=$(this).attr('colorcode');
+        selectKeyId=$(this).attr('id');
+        console.log("selectedKeyColorCode "+selectedKeyColorCode);
+    });
+
+    var map_key_to_circle={};                     //map key with circle
+    var selectedIndex=-1;
     var subcanvas = new fabric.Canvas('subimgview');
-    $(document).on('click', '.subimage', function() {
+    $(document).on('click', '.subimage', function() {  //click on sub canvas
 
-      var imgdata = $(this).attr('src');
-      fabric.util.loadImage(imgdata, function(img) {
-        subcanvas.clear();
-        var image = new fabric.Image(img);
-        image.selectable = false;
-        subcanvas.setWidth(image.getWidth());
-        subcanvas.setHeight(image.getHeight());
-        subcanvas.add(image);
-        subcanvas.centerObject(image);
-        subcanvas.renderAll();
-      });
+        console.log('index id '+$(this).attr("indexid"));
+        selectedIndex=$(this).attr("indexid");
+
+        $('#keyContainer').html('');
+        colorSelectedindex=0;
+        for(var i=0;i<boxArray[selectedIndex].keypoints.length;i++){  // load key
+            $('#keyContainer').append('<li><span class="key" id="'+boxArray[selectedIndex].keypoints[i].keyname+'_'+i+'" colorcode="'+colorSelectedindex+'" style="color: '+colorCode[colorSelectedindex]+';">'+boxArray[selectedIndex].keypoints[i].keyname+' : </span><span class="key_point">'+boxArray[selectedIndex].keypoints[i].keypoint+'</span></li>');
+
+            colorSelectedindex++;
+        }
+
+        var imgdata = this.toDataURL();
+
+
+
+        fabric.util.loadImage(imgdata, function(img) {  //load image in sub canvas
+            subcanvas.clear();
+            var image = new fabric.Image(img);
+            image.selectable = false;
+            subcanvas.setWidth(image.getWidth());
+            subcanvas.setHeight(image.getHeight());
+            subcanvas.add(image);
+            subcanvas.centerObject(image);
+            subcanvas.renderAll();
+        });
     });
 
-    subcanvas.on("mouse:down", function(event) {
-      console.log("Its!! Working...");
+    subcanvas.on("mouse:down", function(event) {   //sub canvas click event and get coordinate
+        console.log("Its!! Working...");
+        if (subcanvas.getActiveObject()) {
+            return false;
+        }
+        var pointer = subcanvas.getPointer(event.e);
+        if(selectedKeySib!=null &&  !circleHashSet[selectKeyId]){
+
+
+
+            selectedKeySib.html('('+pointer.x+','+pointer.y+')');
+            var circleProp={
+                left: pointer.x,
+                top: pointer.y,
+                radius: 1,
+                strokeWidth: 5,
+                stroke: '#'+colorCode[selectedKeyColorCode]+'',
+                selectable: true,
+                hasControls:false,
+                id:selectKeyId
+            };
+            circleHashSet[selectKeyId]=true;
+
+            console.log(circleProp);
+            circle = new fabric.Circle(circleProp);
+            console.log("Map id "+circle.id);
+            subcanvas.add(circle);
+            subcanvas.renderAll();
+            console.log("selected key id "+selectKeyId);
+            map_key_to_circle[circle]=selectKeyId;
+
+            circle.on('moving', function(evt) {
+
+                var p=subcanvas.getPointer(evt.e);
+                console.log(this.id);
+                $('#'+this.id).siblings().html('('+p.x+','+p.y+')');
+            });
+
+
+            selectedKeySib=null;
+        }
     });
 
 
-/*
-    function getMousePos(canvas, evt) {
-      var rect = canvas.getBoundingClientRect();
-      return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-      };
-    }
-    var canvas_subimg_view = document.getElementById('subimgview');
-    var context = canvas_subimg_view.getContext('2d');
 
-    canvas_subimg_view.addEventListener('mousedown', function(evt) {
-      var mousePos = getMousePos(canvas_subimg_view, evt);
-      var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-      console.log(message);
-    }, false);
 
-*/
-    //
-    // // set to the event when the user pressed the mouse button down
-    // var mouseDown;
-    // // only allow one crop. turn it off after that
-    // var disabled = false;
-    // var rectangle = new fabric.Rect({
-    //   fill: 'transparent',
-    //   stroke: '#ccc',
-    //   strokeDashArray: [2, 2],
-    //   visible: false
-    // });
-    // var container = document.getElementById('canvas').getBoundingClientRect();
-    // var canvas = new fabric.Canvas('canvas');
-    // canvas.add(rectangle);
-    // var image;
-    // fabric.util.loadImage("img/images.jpg", function(img) {
-    //   image = new fabric.Image(img);
-    //   image.selectable = false;
-    //   canvas.setWidth(image.getWidth());
-    //   canvas.setHeight(image.getHeight());
-    //   canvas.add(image);
-    //   canvas.centerObject(image);
-    //   canvas.renderAll();
-    // }, null, {
-    //   crossOrigin: 'anonymous'
-    // });
-    // // capture the event when the user clicks the mouse button down
-    // canvas.on("mouse:down", function(event) {
-    //   if (!disabled) {
-    //     rectangle.width = 2;
-    //     rectangle.height = 2;
-    //     rectangle.left = event.e.pageX - container.left;
-    //     rectangle.top = event.e.pageY - container.top;
-    //     rectangle.visible = true;
-    //     mouseDown = event.e;
-    //     canvas.bringToFront(rectangle);
-    //   }
-    // });
-    // // draw the rectangle as the mouse is moved after a down click
-    // canvas.on("mouse:move", function(event) {
-    //   if (mouseDown && !disabled) {
-    //     rectangle.width = event.e.pageX - mouseDown.pageX;
-    //     rectangle.height = event.e.pageY - mouseDown.pageY;
-    //     canvas.renderAll();
-    //   }
-    // });
-    // // when mouse click is released, end cropping mode
-    // canvas.on("mouse:up", function() {
-    //   mouseDown = null;
-    // });
-    //
-    //
-    // $('#cropB').on('click', function() {
-    //   var cropped = new Image();
-    //   cropped.src = canvas.toDataURL({
-    //     format: 'png',
-    //     left: rectangle.left,
-    //     top: rectangle.top,
-    //     width: rectangle.width,
-    //     height: rectangle.height
-    //   });
-    //   cropped.onload = function() {
-    //     image = new fabric.Image(cropped);
-    //     image.left = rectangle.left;
-    //     image.top = rectangle.top;
-    //     image.setCoords();
-    //     //document.getElementById('cropimage').src=canvas.toDataURL(image);
-    //     $('#partimg').append('<div class="col-xs-6 col-md-3"><a href="#" class="thumbnail"><img class="subimage" src="' + canvas.toDataURL(image) + '"></a></div>');
-    //
-    //   };
-    //
-    // });
-  </script>
+
+
+
+
+    jQuery.each(boxArray, function(index, value) {  //Load image from json
+
+        var myCanvas = document.createElement('canvas');
+
+        myCanvas.setAttribute("class", "subimage");
+        myCanvas.setAttribute("indexid", index);
+
+        var ctx = myCanvas.getContext("2d");
+        var img = document.getElementById("mainimg");
+
+        var mydiv = document.createElement('div');
+        mydiv.setAttribute("class", "col-xs-6 col-md-3");
+
+        var anchorlink = document.createElement('a');
+        anchorlink.setAttribute("class", "thumbnail");
+        anchorlink.setAttribute('href',"#");
+
+
+        mydiv.appendChild(anchorlink);
+        anchorlink.appendChild(myCanvas);
+
+        console.log(mydiv);
+        var parent=document.getElementById('partimg');
+        parent.appendChild(mydiv);
+
+        var imageObj = new Image();
+
+        imageObj.onload = function() {
+            // draw cropped image
+            var sourceX = value.box[0];
+            var sourceY = value.box[1];
+            var sourceWidth = value.box[2];
+            var sourceHeight = value.box[3];
+            var destWidth = sourceWidth;
+            var destHeight = sourceHeight;
+            var destX = 0;
+            var destY = 0;
+
+            ctx.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        };
+        imageObj.src = input.test.imgpath;
+
+    });
+</script>
 </body>
-
 </html>
